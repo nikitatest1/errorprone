@@ -1,0 +1,71 @@
+doctype html
+html
+    head
+        title Dankstream Home v1
+        link(rel="stylesheet", href="/static/main_style.css")
+        script(src="/jquery/dist/jquery.js")
+        script(src="/socket.io/socket.io.js")
+        //script(type='text/javascript' src='/paper/dist/paper-full.min.js')
+        script(src="/static/scripts/main_script.js")
+        script(src="/static/scripts/socket_control.js")
+        script(src="/static/scripts/client_info.js")
+    body
+        div(id='chat_opts_modal' class='modal')
+            .modal-content
+                div(id='pick_color_div')
+                    div(id='pick_purple' class='pick_color')
+                    div(id='pick_yellow' class='pick_color')
+                    div(id='pick_blue' class='pick_color')
+                    div(id='pick_coral' class='pick_color')
+                    div(id='pick_red' class='pick_color')
+                    div(id='pick_orange' class='pick_color')
+                    div(id='pick_green' class='pick_color')
+                    div(id='pick_brown' class='pick_color')
+                    div(id='pick_indigo' class='pick_color')
+        #servinfo
+            p(id='port') port : #{port}
+            p(id='myip') your ip : #{yourip}
+            p(id='device') device : #{device}
+            p(id='serverip') server ip : #{server}
+            button(id='test') click
+        #chat
+            #chat_is_hidden
+                span(id='chat_hidden_msg') Chat is hidden
+                br
+                button(id='unhide_chat') Show Chat
+            #infobox
+                .info_item Videos Remaining: <span id='vr'>#{vids_remain}</span>
+                .info_item Stream ends in: <span id='strm'>#{strm_time_remain}</span> minutes
+                .info_item Currently online: <span id='cuc'>#{curr_user_count}</span> #{people_title}
+                .info_item Queue position: <span id='qp'>#{q_pos}</span>
+            #mainchat
+            #chatmsg
+                #chat_opts
+                    span(id='chat_color_txt') Username Color:
+                    div(id='pick_color_div')
+                        div(id='pick_purple' class='pick_color')
+                        div(id='pick_yellow' class='pick_color')
+                        div(id='pick_blue' class='pick_color')
+                        div(id='pick_coral' class='pick_color')
+                        div(id='pick_red' class='pick_color')
+                        div(id='pick_orange' class='pick_color')
+                        div(id='pick_green' class='pick_color')
+                        div(id='pick_aqua' class='pick_color')
+                        div(id='pick_pink' class='pick_color')
+                    div(id='chat_opts_buttons')
+                        span(id='hide_chat' class='chat_opts_butts') Hide Chat
+                        span(id='filter_chat' class='chat_opts_butts') Filter
+                        span(id='close_chat_options' class='chat_opts_butts') Back to chat
+                #enter_usrname
+                    input(id='usrname_input' type='text' maxlength="20" placeholder='Enter Username Here')
+                    button(id='usrname_input_button' type='button') Submit
+                #chat_not_ready
+                    #get_name
+                        div Enter Username
+                #chatfield
+                    input(id='chat_input_field' type='text' maxlength='100' placeholder='Send a message')
+                    #chatoptions
+                        img(src='/static/settings_wheel.png')
+                #chatsubmit
+                    span &rarr;
+                
