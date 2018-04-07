@@ -3,6 +3,11 @@ html, body {
   width: 100%;
   background-color: #e1e3e8;
   overflow: hidden;
+  margin: 0;
+  padding: 0;
+  /* position: relative; */
+  /* height: auto; */
+  /* min-height: 100% !important; */
 }
 /* The Modal (background) */
 .modal {
@@ -18,6 +23,27 @@ html, body {
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
+#mainside {
+  width: 72%;
+  display: inline-block;
+  height: 100%;
+  float: left;
+  background-color: green;
+}
+
+#maintop {
+  display: block;
+  width: 100%;
+  height: 75%;
+  background-color: pink;
+}
+
+#mainbottom {
+  display: block;
+  width: 100%;
+  height: 25%;
+  background-color: aqua;
+}
 
 .info_item {
   height: 25%;
@@ -38,9 +64,10 @@ html, body {
 }
 
 #servinfo {
-  height: 100%;
-  display: inline-block;
   float: left;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 #chat {
