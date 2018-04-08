@@ -309,7 +309,10 @@ button:focus {
   display: inline-block;
   color: white;
   font-size: 2vw;
-  margin-top: 45%;
+  top: 50%;
+  position: relative;
+  transform: translateY(-50%);
+  /* margin-top: 45%; */
   /* margin:10px 10px 0 0; */
   /* padding:5px 10px; */
 }
