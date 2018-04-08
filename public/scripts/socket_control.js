@@ -24,6 +24,26 @@ $(document).ready(function() {
         $("#cuc").text(arg.curr_user_count)
         $("#strm").text(arg.strm_time_remain)
         $("#qp").text(arg.q_pos)
+    } else if(arg.type == "next_video") {
+      console.log("video")
+      var req = new XMLHttpRequest();
+      req.open('GET', arg.url, true);
+      req.responseType = 'blob';
+      console.log("sending!")
+      req.onload = function() {
+        console.log("received!")
+        if(this.status === 200) {
+          var vidBlob = this.response;
+          var vid = URL.createObjectURL(vidBlob);
+          //console.log(vid)
+          $("#videoPlayer").html('<source src='+vid+' type="'+arg.mime+'"></source>');
+          console.log($("#videoPlayer"))
+        }
+      }
+      req.onerror = function() {
+        console.log("error oh no")
+      }
+      req.send();
     }
     // var time = Date.now()
     // var srvmsg = "ORIGINAL SIP:" + arg.servip + ", CLIENT IP:" + arg.ip + ", CLIENT PORT:" + arg.port
