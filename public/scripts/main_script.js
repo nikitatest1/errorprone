@@ -144,6 +144,8 @@ $(document).ready(function() {
     // })
 
     $("#test").click(function() {
+      var markup = "<div>" + "<p style='color: blue;'>Helooooo</p>" + "</div>"
+      window.modal_control.pop(markup,0,0,0,0,0)
       console.log($("#mainchat").scrollTop())
       console.log("this position:", window.chat_manage.position)
       // var port = $("#port").text()
