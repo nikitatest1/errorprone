@@ -35,6 +35,7 @@ $(document).ready(function() {
           var vidBlob = this.response;
           var vid = URL.createObjectURL(vidBlob);
           window.socket.emit('c2n', {type: "vsync"})
+          window.video_control.stage(vid,arg.mime, arg.index)
           //console.log(vid)
           //$("#videoPlayer").html('<source src='+vid+' type="'+arg.mime+'"></source>');
           //console.log($("#videoPlayer"))
@@ -44,6 +45,11 @@ $(document).ready(function() {
         console.log("error oh no")
       }
       req.send();
+    } else if(arg.type == "play_video") {
+      window.video_control.play()
+      $("#videoPlayer").on('ended', function() {
+        window.socket.emit('c2n', {type:"modal_begin"})
+      })
     }
     // var time = Date.now()
     // var srvmsg = "ORIGINAL SIP:" + arg.servip + ", CLIENT IP:" + arg.ip + ", CLIENT PORT:" + arg.port

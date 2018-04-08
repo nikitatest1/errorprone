@@ -23,6 +23,9 @@ module.exports = function(port, io, dbase) {
 
   v_neuron.on('next_video', function(arg) {
     console.log("received vid from brain")
+    for(user in my_clients) {
+      my_clients[user].downloaded = 0
+    }
     var url = arg.cdnurl
     var new_url = url.replace("http:", "https:")
     io.sockets.emit('n2c', {type: 'next_video', url: new_url, mime: arg.mime, index: arg.index})
@@ -35,16 +38,17 @@ module.exports = function(port, io, dbase) {
       for(user in my_clients) {
         num_users_ready += my_clients[user].downloaded
       }
-      var threshold = 0.8;
-      if(num_users_ready/num_users >= threshold) {
+      var threshold1 = 0.8;
+      if(num_users_ready/num_users >= threshold1) {
         console.log("num users:", num_users, "num users ready:", num_users_ready)
         v_neuron.emit('neuron_ready', 1)
       } else {
         if(num_users == 0) {
           v_neuron.emit('neuron_ready', 1)
+        } else {
+          console.log(threshold1*100, "% users not ready yet")
+          setTimeout(check_if_ready, 1000)
         }
-        console.log(threshold*100, "% users not ready yet")
-        setTimeout(check_if_ready, 1000)
       }
   }
 
@@ -57,7 +61,7 @@ module.exports = function(port, io, dbase) {
     io.on('connection', function(socket){
       var ip = socket.handshake.headers["x-real-ip"]
       console.log("someone connected: " + ip)
-      my_clients[socket.client.id] = {downloaded: 0}
+      my_clients[socket.client.id] = {downloaded: 0, no_modal: 1}
       console.log("connected id", socket.client.id)
 
       neuron.emit('user_enter', 1)
@@ -90,10 +94,13 @@ module.exports = function(port, io, dbase) {
         } else if(arg.type == 'vsync') {
           try {
             my_clients[socket.client.id].downloaded = 1
-            console.log(my_clients)
           } catch(e) {
             console.log("couldnt set downloaded to 1")
           }
+        } else if(arg.type == 'modal_begin') {
+          my_clients[socket.client.id].no_modal = 0 //set [there is no modal] to false
+        } else if(arg.type == 'modal_end') {
+          my_clients[socket.client.id].no_modal = 1 // modal has ended
         } else {
           socket.emit('n2c', arg)
           neuron.emit('n2b', arg)
