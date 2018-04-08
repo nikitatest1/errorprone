@@ -1,0 +1,3 @@
+window.video_control = {
+  
+}
