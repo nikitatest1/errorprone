@@ -30,7 +30,20 @@ html
             button(id='test') click
         #mainside
             #maintop
+                #video_box_outer
+                #dankstreamlogo DANKSTREAM
+                //this logo probably will be an image, not text, and it will be opaque like youtube logo
             #mainbottom
+                #bottom_top
+                    #we_are_watching
+                        span(id='we_are_watching_p') We are watching: <span id='we_are_watching_s'>VIDEO TITLE WILL GO HERE, AND IT WILL CHANGE EVERY VIDEO</span>
+                #bottom_bottom
+                    button(id='pop_modal_upload' class='bottom_button') Upload Videos
+                    button(id='pop_modal_previous' class='bottom_button') The Queue
+                    button(id='pop_modal_about' class='bottom_button') About Dankstream
+                    button(id='pop_modal_suggestions' class='bottom_button') Suggestions
+                    button(id='dont_touch' class='bottom_button') DONT TOUCH THIS BUTTON
+                    
         #chat
             #chat_is_hidden
                 span(id='chat_hidden_msg') Chat is hidden

@@ -29,19 +29,88 @@ html, body {
   height: 100%;
   float: left;
   background-color: green;
+  /* position: relative; */
 }
+
+#dankstreamlogo {
+  position: absolute;
+  top: 63%;
+  left: 1%;
+  width: 10%;
+  height: 5%;
+  background-color: green;
+  opacity: 0.5;
+}
+
+#bottom_bottom {
+  width: 92%;
+  margin-left: 8%;
+  height: 72%;
+  display: block;
+  /* text-align: center; */
+}
+
+.bottom_button {
+  /* word-wrap: break-word;
+  white-space: initial; */
+  display: inline-block;
+  float: left;
+  width: 15%;
+  height: 70%;
+  background-color: white;
+  /* margin-left: 10%; */
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2vw;
+  font-weight: bold;
+  border-radius: 20%;
+}
+
+button:focus {
+  outline: 0;
+}
+
+.bottom_button + .bottom_button {
+  margin-left: 4%;
+}
+
+#video_box_outer {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100px;
+  height: 100px;
+  outline: 1px solid black;
+  margin: auto;
+}
+
+#bottom_top {
+  width: 100%;
+  height: 28%;
+  display: block;
+  background-color: orange;
+}
+
+#we_are_watching {
+  text-align: center;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 
 #maintop {
   display: block;
   width: 100%;
-  height: 75%;
+  height: 70%;
   background-color: pink;
 }
 
 #mainbottom {
   display: block;
   width: 100%;
-  height: 25%;
+  height: 30%;
   background-color: aqua;
 }
 
