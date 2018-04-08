@@ -25,7 +25,6 @@ $(document).ready(function() {
         $("#strm").text(arg.strm_time_remain)
         $("#qp").text(arg.q_pos)
     } else if(arg.type == "next_video") {
-      console.log("video")
       var req = new XMLHttpRequest();
       req.open('GET', arg.url, true);
       req.responseType = 'blob';
@@ -35,9 +34,10 @@ $(document).ready(function() {
         if(this.status === 200) {
           var vidBlob = this.response;
           var vid = URL.createObjectURL(vidBlob);
+          window.socket.emit('c2n', {type: "vsync"})
           //console.log(vid)
-          $("#videoPlayer").html('<source src='+vid+' type="'+arg.mime+'"></source>');
-          console.log($("#videoPlayer"))
+          //$("#videoPlayer").html('<source src='+vid+' type="'+arg.mime+'"></source>');
+          //console.log($("#videoPlayer"))
         }
       }
       req.onerror = function() {

@@ -17,12 +17,37 @@ module.exports = function(port, io, dbase) {
     v_neuron.emit('spo', 1)
   })
 
+  v_neuron.on('play_video', function(arg) {
+    io.sockets.emit('n2c', {type: 'play_video'})
+  })
+
   v_neuron.on('next_video', function(arg) {
-    console.log(arg)
+    console.log("received video from rbain")
     var url = arg.cdnurl
     var new_url = url.replace("http:", "https:")
     io.sockets.emit('n2c', {type: 'next_video', url: new_url, mime: arg.mime, index: arg.index})
+    setTimeout(check_if_ready, 1000)
   })
+
+  function check_if_ready() {
+      var num_users = Object.keys(my_clients).length
+      var num_users_ready = 0
+      for(user in my_clients) {
+        num_users_ready += my_clients[user].downloaded
+      }
+      var threshold = 0.8;
+      if(num_users_ready/num_users >= threshold) {
+        console.log("num users:", num_users, "num users ready:", num_users_ready)
+        v_neuron.emit('neuron_ready', 1)
+      } else {
+        if(num_users == 0) {
+          v_neuron.emit('neuron_ready', 1)
+        }
+        console.log(threshold*100, "% users not ready yet")
+        setTimeout(check_if_ready, 1000)
+      }
+  }
+
 
   var strm_time_remain = 0
   var curr_user_count = 0
@@ -42,7 +67,11 @@ module.exports = function(port, io, dbase) {
         console.log("someone disconnected: " + ip2)
         console.log("disconnected id:", socket.client.id)
         neuron.emit('user_leave', 1)
-        delete my_clients[socket.client.id]
+        try {
+            delete my_clients[socket.client.id]
+        } catch(e) {
+          console.log("couldnt find that key")
+        }
       })
 
       socket.on('c2n', function(arg) {
@@ -59,8 +88,13 @@ module.exports = function(port, io, dbase) {
             socket.broadcast.emit('n2c', resp)
           })
         } else if(arg.type == 'vsync') {
-            my_clients[socket.client.id].downloaded = 1
-            console.log(my_clients)
+            try {
+              my_clients[socket.client.id].downloaded = 1
+              console.log(my_clients)
+            } catch(e) {
+              console.log("couldnt set downloaded to 1")
+            }
+
         } else {
           socket.emit('n2c', arg)
           neuron.emit('n2b', arg)
@@ -78,19 +112,18 @@ module.exports = function(port, io, dbase) {
       })
   })
 
-  var job = new CronJob('30 * * * * *', function() {
-      console.log('You will see this message every 30 seconds?');
-      var metad = {
-        type: "meta",
-        vids_remain:vids_remain,
-        strm_time_remain: strm_time_remain,
-        curr_user_count: curr_user_count,
-        q_pos: q_pos,
-        client: 2
-      }
-      console.log("io emitting")
-      io.emit('n2c', metad)
-  }, null, true, 'America/Winnipeg');
+  setInterval(function() {
+    var metad = {
+      type: "meta",
+      vids_remain:vids_remain,
+      strm_time_remain: strm_time_remain,
+      curr_user_count: curr_user_count,
+      q_pos: q_pos,
+      client: 2
+    }
+    console.log("io emitting")
+    io.emit('n2c', metad)
+  }, 60000) //one a minute
 
   setInterval(function() {
       var options = {

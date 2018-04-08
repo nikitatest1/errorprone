@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    socket = io.connect() //probably dont need sockets for this
+    socket = io.connect() 
     console.log(window.socket)
 
     $("#chat_not_ready").hover(function() {
