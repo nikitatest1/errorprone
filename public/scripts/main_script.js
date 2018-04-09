@@ -145,10 +145,19 @@ $(document).ready(function() {
 
     $("#test").click(function() {
       var markup = "<div>" + "<p style='color: blue;'>Helooooo</p>" + "</div>"
-      //window.modal_control.pop(markup,0,0,0,0,0)
+      // window.modal_control.pop(markup,0,-1,-1,10,10)
+
+      var delay = Math.random() * 10000
+      console.log("delaying for", delay)
+      var rand_width = Math.random() * 100
+      window.modal_control.pop(markup, delay, 20,20, rand_width,50)
       //console.log($("#mainchat").scrollTop())
       //console.log("this position:", window.chat_manage.position)
-      window.client_info.debug = 1
+
+      //use this for testing server client readyness
+      //window.client_info.debug = 1
+
+
       // var port = $("#port").text()
       // var myip = $("#myip").text()
       // var servip = $("#serverip").text()
