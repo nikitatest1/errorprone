@@ -20,7 +20,7 @@ $(document).ready(function() {
       var message = "<div id='msg0'>" + "<span class='color_"+arg.color+"'>" + arg.username + " </span>" + "<span id='msg1'>"+arg.message + "</span>"+"</div>"
       window.chat_manage.add(message)
     } else if(arg.type == "meta") {
-        $("#vr").text(arg.vids_remain)
+        // $("#vr").text(arg.vids_remain)
         $("#cuc").text(arg.curr_user_count)
         $("#strm").text(arg.strm_time_remain)
     } else if(arg.type == "next_video") {
@@ -35,7 +35,7 @@ $(document).ready(function() {
           var vid = URL.createObjectURL(vidBlob);
           if(window.client_info.debug == 0) {
               window.socket.emit('c2n', {type: "vsync"})
-              window.video_control.stage(vid,arg.mime, arg.index, arg.title)
+              window.video_control.stage(vid,arg.mime, arg.index, arg.title, arg.width, arg.height)
           }
 
 
@@ -49,6 +49,7 @@ $(document).ready(function() {
       }
       req.send();
     } else if(arg.type == "play_video") {
+
       window.video_control.play()
     }
     // var time = Date.now()

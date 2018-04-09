@@ -97,13 +97,41 @@ button:focus {
 
 #video_box_outer {
   position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 100px;
-  height: 100px;
-  outline: 1px solid black;
-  margin: auto;
+  /* top: 50%;
+  transform: translateY(-50%); */
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  /* margin: auto; */
+  overflow: hidden;
+  text-align: center;
+  z-index: 3;
 }
+#video_box_outer:before {
+	content: "";
+	width: 1px;
+	height: 100%;
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: -1px;
+}
+
+#video_canvas {
+  display: block;
+  width: 72%;
+  height: 70%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(20,20,20,0.5);
+  z-index: 4;
+}
+
+/* #video_box_outer > video {
+  min-width: 100%;
+  min-height: 100%;
+  outline: 1px solid yellow;
+} */
 
 #bottom_top {
   width: 100%;
@@ -159,6 +187,10 @@ button:focus {
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 10;
+}
+#servinfo > p {
+  color: white;
 }
 
 #chat {

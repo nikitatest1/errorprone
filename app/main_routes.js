@@ -20,7 +20,7 @@ module.exports = function(port, app, db) {
 
 setInterval(function() {
     var options = {
-      url: "http://18.218.241.80:8089/meta_data",
+      url: "http://18.218.241.80:8089/meta_data_original",
       method: "POST"
     }
     request(options, function(err, response, body) {
@@ -29,14 +29,14 @@ setInterval(function() {
         }
         var parsed_body = JSON.parse(body)
         curr_user_count = parsed_body['count']
-        vids_remain = parsed_body['vids_remain']
         q_pos = parsed_body['q_pos']
+        vids_remain = parsed_body['vids_remain']
         strm_time_remain = parsed_body['time_remain']
     })
 },120000)
 
 var options = {
-  url: "http://18.218.241.80:8089/meta_data",
+  url: "http://18.218.241.80:8089/meta_data_original",
   method: "POST"
 }
 request(options, function(err, response, body) {

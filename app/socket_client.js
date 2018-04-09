@@ -24,7 +24,7 @@ module.exports = function(port, io, dbase) {
     }
     var url = arg.cdnurl
     var new_url = url.replace("http:", "https:")
-    io.sockets.emit('n2c', {type: 'next_video', url: new_url, mime: arg.mime, index: arg.index, title: arg.title})
+    io.sockets.emit('n2c', {type: 'next_video', url: new_url, mime: arg.mime, index: arg.index, title: arg.title, width: arg.meta.width, height: arg.meta.height})
     setTimeout(function() {
       check_if_ready(6)
     }, 1000)
@@ -122,7 +122,7 @@ module.exports = function(port, io, dbase) {
   setInterval(function() {
     var metad = {
       type: "meta",
-      vids_remain:vids_remain,
+      // vids_remain:vids_remain,
       strm_time_remain: strm_time_remain,
       curr_user_count: curr_user_count,
       client: 1
@@ -141,7 +141,7 @@ module.exports = function(port, io, dbase) {
           }
           var parsed_body = JSON.parse(body)
           curr_user_count = parsed_body['count']
-          vids_remain = parsed_body['vids_remain']
+          // vids_remain = parsed_body['vids_remain']
           strm_time_remain = parsed_body['time_remain']
       })
   },40000)

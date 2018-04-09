@@ -1,19 +1,22 @@
 window.video_control = {
   videos: {},
   next_index: -1,
-  stage: function(vid, mime, index, title) {
-    this.videos[index] = {vid: vid, mime: mime, title: title}
+  stage: function(vid, mime, index, title, width, height) {
+    this.videos[index] = {vid: vid, mime: mime, title: title, width: width, height: height}
     this.next_index = index
   },
   play: function() {
-    console.log(this.videos)
+    console.log(window.video_control)
     var index = this.next_index
     var title = this.videos[index].title
     $("#videoPlayer").remove()
+    var style_str = "max-width: 100%; max-height: 100%; display: inline-block; vertical-align: middle;"
     var source_str = '<source src='+this.videos[index].vid+' type="'+this.videos[index].mime+'"></source>'
-    var vid_str = "<video id='videoPlayer' autoplay>" + source_str + "</video>"
+    var vid_str = "<video style='"+style_str+"' id='videoPlayer' autoplay>" + source_str + "</video>"
     $("#video_box_outer").append(vid_str)
     $("#qp").text(index)
+    var vr = parseInt($("#vr").text())
+    $("#vr").text(vr-1)
     $("#we_are_watching_s").text(title)
     // console.log("supposed to be empty", $("#videoPlayer"))
     // $("#videoPlayer").html('<source src='+this.videos[index].vid+' type="'+this.videos[index].mime+'"></source>');
