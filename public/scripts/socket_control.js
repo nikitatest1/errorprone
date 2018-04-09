@@ -23,7 +23,6 @@ $(document).ready(function() {
         $("#vr").text(arg.vids_remain)
         $("#cuc").text(arg.curr_user_count)
         $("#strm").text(arg.strm_time_remain)
-        $("#qp").text(arg.q_pos)
     } else if(arg.type == "next_video") {
       var req = new XMLHttpRequest();
       req.open('GET', arg.url, true);
@@ -34,8 +33,12 @@ $(document).ready(function() {
         if(this.status === 200) {
           var vidBlob = this.response;
           var vid = URL.createObjectURL(vidBlob);
-          window.socket.emit('c2n', {type: "vsync"})
-          window.video_control.stage(vid,arg.mime, arg.index)
+          if(window.client_info.debug == 0) {
+              window.socket.emit('c2n', {type: "vsync"})
+              window.video_control.stage(vid,arg.mime, arg.index, arg.title)
+          }
+
+
           //console.log(vid)
           //$("#videoPlayer").html('<source src='+vid+' type="'+arg.mime+'"></source>');
           //console.log($("#videoPlayer"))
@@ -47,9 +50,6 @@ $(document).ready(function() {
       req.send();
     } else if(arg.type == "play_video") {
       window.video_control.play()
-      $("#videoPlayer").on('ended', function() {
-        window.socket.emit('c2n', {type:"modal_begin"})
-      })
     }
     // var time = Date.now()
     // var srvmsg = "ORIGINAL SIP:" + arg.servip + ", CLIENT IP:" + arg.ip + ", CLIENT PORT:" + arg.port

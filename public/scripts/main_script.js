@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    socket = io.connect() 
+    socket = io.connect()
     console.log(window.socket)
 
     $("#chat_not_ready").hover(function() {
@@ -145,9 +145,10 @@ $(document).ready(function() {
 
     $("#test").click(function() {
       var markup = "<div>" + "<p style='color: blue;'>Helooooo</p>" + "</div>"
-      window.modal_control.pop(markup,0,0,0,0,0)
-      console.log($("#mainchat").scrollTop())
-      console.log("this position:", window.chat_manage.position)
+      //window.modal_control.pop(markup,0,0,0,0,0)
+      //console.log($("#mainchat").scrollTop())
+      //console.log("this position:", window.chat_manage.position)
+      window.client_info.debug = 1
       // var port = $("#port").text()
       // var myip = $("#myip").text()
       // var servip = $("#serverip").text()

@@ -12,43 +12,48 @@ const v_neuron          = sio.connect("http://18.218.241.80:3009/", {
 module.exports = function(port, io, dbase) {
   // neuron.on('connect', function () {
 
-  v_neuron.on('spi', function(arg) {
-    console.log("received ping from video neuron")
-    v_neuron.emit('spo', 1)
-  })
 
   v_neuron.on('play_video', function(arg) {
     io.sockets.emit('n2c', {type: 'play_video'})
   })
 
   v_neuron.on('next_video', function(arg) {
-    console.log("received vid from brain")
+    console.log("received vid from brain", arg.title)
     for(user in my_clients) {
       my_clients[user].downloaded = 0
     }
     var url = arg.cdnurl
     var new_url = url.replace("http:", "https:")
-    io.sockets.emit('n2c', {type: 'next_video', url: new_url, mime: arg.mime, index: arg.index})
-    setTimeout(check_if_ready, 1000)
+    io.sockets.emit('n2c', {type: 'next_video', url: new_url, mime: arg.mime, index: arg.index, title: arg.title})
+    setTimeout(function() {
+      check_if_ready(6)
+    }, 1000)
   })
 
-  function check_if_ready() {
-      var num_users = Object.keys(my_clients).length
-      var num_users_ready = 0
-      for(user in my_clients) {
-        num_users_ready += my_clients[user].downloaded
-      }
-      var threshold1 = 0.8;
-      if(num_users_ready/num_users >= threshold1) {
-        console.log("num users:", num_users, "num users ready:", num_users_ready)
-        v_neuron.emit('neuron_ready', 1)
-      } else {
-        if(num_users == 0) {
+  function check_if_ready(times) {
+      if(times >= 0) {
+        var num_users = Object.keys(my_clients).length
+        var num_users_ready = 0
+        for(user in my_clients) {
+          num_users_ready += my_clients[user].downloaded
+        }
+        var threshold1 = 0.8;
+        var percent_ready = num_users_ready / num_users
+        if(percent_ready >= threshold1) {
+          console.log("percent_ready:", percent_ready)
           v_neuron.emit('neuron_ready', 1)
         } else {
-          console.log(threshold1*100, "% users not ready yet")
-          setTimeout(check_if_ready, 1000)
+          if(num_users == 0) {
+            v_neuron.emit('neuron_ready', 1)
+          } else {
+            console.log("not ready, percent_ready:", percent_ready)
+            setTimeout(function() {
+              check_if_ready(times-1)
+            }, 1000)
+          }
         }
+      } else {
+        v_neuron.emit('neuron_ready', 1) //falback case
       }
   }
 
@@ -61,7 +66,7 @@ module.exports = function(port, io, dbase) {
     io.on('connection', function(socket){
       var ip = socket.handshake.headers["x-real-ip"]
       console.log("someone connected: " + ip)
-      my_clients[socket.client.id] = {downloaded: 0, no_modal: 1}
+      my_clients[socket.client.id] = {downloaded: 0}
       console.log("connected id", socket.client.id)
 
       neuron.emit('user_enter', 1)
@@ -97,10 +102,6 @@ module.exports = function(port, io, dbase) {
           } catch(e) {
             console.log("couldnt set downloaded to 1")
           }
-        } else if(arg.type == 'modal_begin') {
-          my_clients[socket.client.id].no_modal = 0 //set [there is no modal] to false
-        } else if(arg.type == 'modal_end') {
-          my_clients[socket.client.id].no_modal = 1 // modal has ended
         } else {
           socket.emit('n2c', arg)
           neuron.emit('n2b', arg)
@@ -124,12 +125,10 @@ module.exports = function(port, io, dbase) {
       vids_remain:vids_remain,
       strm_time_remain: strm_time_remain,
       curr_user_count: curr_user_count,
-      q_pos: q_pos,
-      client: 2
+      client: 1
     }
-    console.log("io emitting")
     io.emit('n2c', metad)
-  }, 60000) //one a minute
+  }, 42000) //one every 42 seconds
 
   setInterval(function() {
       var options = {
@@ -143,9 +142,8 @@ module.exports = function(port, io, dbase) {
           var parsed_body = JSON.parse(body)
           curr_user_count = parsed_body['count']
           vids_remain = parsed_body['vids_remain']
-          q_pos = parsed_body['q_pos']
           strm_time_remain = parsed_body['time_remain']
       })
-  },20000)
+  },40000)
 
 }

@@ -1,6 +1,7 @@
 window.client_info = {
   username : "",
   chat_color: "",
+  debug: 0,
   set_username : function(username) {
     this.username = username
     this.chat_color = pick_color()

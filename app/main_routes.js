@@ -19,7 +19,6 @@ module.exports = function(port, app, db) {
   })
 
 setInterval(function() {
-    console.log("interval")
     var options = {
       url: "http://18.218.241.80:8089/meta_data",
       method: "POST"
@@ -29,12 +28,27 @@ setInterval(function() {
           console.log(err)
         }
         var parsed_body = JSON.parse(body)
-        console.log(parsed_body)
         curr_user_count = parsed_body['count']
         vids_remain = parsed_body['vids_remain']
         q_pos = parsed_body['q_pos']
         strm_time_remain = parsed_body['time_remain']
     })
-},20000)
+},120000)
+
+var options = {
+  url: "http://18.218.241.80:8089/meta_data",
+  method: "POST"
+}
+request(options, function(err, response, body) {
+    if(err) {
+      console.log(err)
+    }
+    var parsed_body = JSON.parse(body)
+    console.log(parsed_body)
+    curr_user_count = parsed_body['count']
+    vids_remain = parsed_body['vids_remain']
+    q_pos = parsed_body['q_pos']
+    strm_time_remain = parsed_body['time_remain']
+})
 
 }
