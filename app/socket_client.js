@@ -11,9 +11,14 @@ const v_neuron          = sio.connect("http://18.218.241.80:3009/", {
 
 module.exports = function(port, io, dbase) {
   // neuron.on('connect', function () {
-
+  var modal_delay = 5000
+  var current_video = {playing: 0, duration: 0}
 
   v_neuron.on('play_video', function(arg) {
+    current_video.playing = 1
+    setTimeout(function() {
+        current_video.playing = 0
+    },current_video.duration + modal_delay)
     io.sockets.emit('n2c', {type: 'play_video'})
   })
 
@@ -24,6 +29,7 @@ module.exports = function(port, io, dbase) {
     }
     var url = arg.cdnurl
     var new_url = url.replace("http:", "https:")
+    current_video.duration = arg.duration * 1000
     io.sockets.emit('n2c', {type: 'next_video', url: new_url, mime: arg.mime, index: arg.index, title: arg.title, width: arg.meta.width, height: arg.meta.height})
     setTimeout(function() {
       check_if_ready(6)
@@ -68,7 +74,7 @@ module.exports = function(port, io, dbase) {
       console.log("someone connected: " + ip)
       my_clients[socket.client.id] = {downloaded: 0}
       console.log("connected id", socket.client.id)
-
+      socket.emit('n2c', {type: 'ready_check', cp: current_video.playing})
       neuron.emit('user_enter', 1)
 
       socket.on('disconnect', function() {

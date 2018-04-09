@@ -33,15 +33,10 @@ $(document).ready(function() {
         if(this.status === 200) {
           var vidBlob = this.response;
           var vid = URL.createObjectURL(vidBlob);
-          if(window.client_info.debug == 0) {
+          if(window.client_info.debug == 0) { //debug is a temporary flag to prevent video sync for testing
               window.socket.emit('c2n', {type: "vsync"})
               window.video_control.stage(vid,arg.mime, arg.index, arg.title, arg.width, arg.height)
           }
-
-
-          //console.log(vid)
-          //$("#videoPlayer").html('<source src='+vid+' type="'+arg.mime+'"></source>');
-          //console.log($("#videoPlayer"))
         }
       }
       req.onerror = function() {
@@ -49,8 +44,14 @@ $(document).ready(function() {
       }
       req.send();
     } else if(arg.type == "play_video") {
-
       window.video_control.play()
+    } else if(arg.type == "ready_check") {
+      if(arg.cp == 1) {
+        console.log("server is currently playing a video, im not ready")
+        window.video_control.im_ready = 0
+      } else {
+        window.video_control.im_ready = 1
+      }
     }
     // var time = Date.now()
     // var srvmsg = "ORIGINAL SIP:" + arg.servip + ", CLIENT IP:" + arg.ip + ", CLIENT PORT:" + arg.port
