@@ -27,11 +27,13 @@ $(document).ready(function() {
       var req = new XMLHttpRequest();
       req.open('GET', arg.url, true);
       req.responseType = 'blob';
+      window.video_control.downloading = 1;
       console.log("sending!")
       req.onload = function() {
         console.log("received!")
         if(this.status === 200) {
           var vidBlob = this.response;
+          window.video_control.downloading = 0;
           var vid = URL.createObjectURL(vidBlob);
           if(window.client_info.debug == 0) { //debug is a temporary flag to prevent video sync for testing
               window.socket.emit('c2n', {type: "vsync"})
