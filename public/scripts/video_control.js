@@ -11,14 +11,17 @@ window.video_control = {
     }
     this.videos[index] = {vid: vid, mime: mime, title: title, width: width, height: height}
     this.next_index = index
-    if(this.insta_play == 1) {
-      this.play()
-      this.insta_play = 0
-    }
+    // if(this.insta_play == 1) {
+    //   this.play()
+    //   this.insta_play = 0
+    // }
   },
   play: function() {
     if(this.im_ready == 1) {
-      if(this.downloading == 0) {
+      if(this.downloading == 0 || this.downloading == 1) {
+        if(this.downloading == 1) {
+          console.log("u received a play request before u finished downloading the video")
+        }
         var index = this.next_index
         var title = this.videos[index].title
         $("#videoPlayer").remove()

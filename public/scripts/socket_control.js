@@ -36,7 +36,7 @@ $(document).ready(function() {
           window.video_control.downloading = 0;
           var vid = URL.createObjectURL(vidBlob);
           if(window.client_info.debug == 0) { //debug is a temporary flag to prevent video sync for testing
-              window.socket.emit('c2n', {type: "vsync"})
+              window.socket.emit('c2n', {type: "vsync", index:arg.index})
               window.video_control.stage(vid,arg.mime, arg.index, arg.title, arg.width, arg.height)
           }
         }
